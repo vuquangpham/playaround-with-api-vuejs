@@ -81,30 +81,13 @@ export default {
       this.invalidInput = false;
 
       const data = {
+        id: new Date().toISOString(),
         name: this.enteredName,
         rating: this.chosenRating,
         experience: this.$refs.experience.value.trim(),
       };
 
       this.$emit("survey-submit", data);
-
-      // POST data to database
-      fetch(
-        "https://vuejs-demo-sending-http-default-rtdb.asia-southeast1.firebasedatabase.app/surveys.json",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      )
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`Can't POST data to databse`);
-          }
-        })
-        .catch((err) => alert(err.message));
 
       this.enteredName = "";
       this.$refs.experience.value = "";
