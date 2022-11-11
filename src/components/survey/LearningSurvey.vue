@@ -38,7 +38,16 @@
           />
           <label for="rating-great">Great</label>
         </div>
-        <p v-if="invalidInput">
+        <div class="form-control">
+          <label for="experience">Your experience:</label>
+          <textarea id="experience" rows="5" ref="experience"></textarea>
+        </div>
+        <p
+          v-if="invalidInput"
+          :style="{
+            color: 'red',
+          }"
+        >
           One or more input fields are invalid. Please check your provided data.
         </p>
         <div>
@@ -70,11 +79,35 @@ export default {
         return;
       }
       this.invalidInput = false;
-      this.$emit("survey-submit", {
-        userName: this.enteredName,
+
+      const data = {
+        name: this.enteredName,
         rating: this.chosenRating,
-      });
+        experience: this.$refs.experience.value.trim(),
+      };
+
+      this.$emit("survey-submit", data);
+
+      // POST data to database
+      fetch(
+        "https://vuejs-demo-sending-http-default-rtdb.asia-southeast1.firebasedatabase.app/surveys.json",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Can't POST data to databse`);
+          }
+        })
+        .catch((err) => alert(err.message));
+
       this.enteredName = "";
+      this.$refs.experience.value = "";
       this.chosenRating = null;
     },
   },
@@ -83,12 +116,21 @@ export default {
 
 <style scoped>
 .form-control {
-  margin: 0.5rem 0;
+  margin: 1rem 0;
 }
 
 input[type="text"] {
   display: block;
   width: 20rem;
   margin-top: 0.5rem;
+}
+
+label {
+  font-weight: bold;
+}
+
+textarea {
+  display: block;
+  width: 20rem;
 }
 </style>

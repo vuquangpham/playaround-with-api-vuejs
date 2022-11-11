@@ -2,15 +2,18 @@
   <li>
     <p>
       <span class="highlight">{{ name }}</span> rated the learning experience
-      <span :class="ratingClass">{{ rating }}</span
-      >.
+      <span :class="ratingClass">{{ rating }}</span>
+      <span>
+        and {{ name }} said that <strong>{{ experience }}</strong
+        >.
+      </span>
     </p>
   </li>
 </template>
 
 <script>
 export default {
-  props: ["name", "rating"],
+  props: ["name", "rating", "experience"],
   computed: {
     ratingClass() {
       return "highlight rating--" + this.rating;

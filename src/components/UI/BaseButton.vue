@@ -1,8 +1,19 @@
 <template>
-  <button>
+  <button @click="handleButtonClick">
     <slot></slot>
   </button>
 </template>
+
+<script>
+export default {
+  emits: ["click"],
+  methods: {
+    handleButtonClick() {
+      this.$emit("click");
+    },
+  },
+};
+</script>
 
 <style scoped>
 button {
